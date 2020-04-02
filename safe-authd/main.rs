@@ -31,9 +31,6 @@ use update::update_commander;
 #[macro_use]
 extern crate human_panic;
 
-#[macro_use]
-extern crate self_update;
-
 #[cfg(not(target_os = "windows"))]
 use operations::{
     install_authd, restart_authd, start_authd, start_authd_from_sc, stop_authd, uninstall_authd,

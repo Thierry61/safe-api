@@ -7,6 +7,7 @@
 // specific language governing permissions and limitations relating to use of the SAFE Network
 // Software.
 
+#[cfg(feature = "auto-update")]
 use super::helpers::download_from_s3_and_install_bin;
 use directories::BaseDirs;
 use log::debug;
@@ -58,6 +59,12 @@ fn run_safe_cmd(
     Ok(())
 }
 
+#[cfg(not(feature = "auto-update"))]
+pub fn vault_install(_vault_path: Option<PathBuf>) -> Result<(), String> {
+    Err("Auto update is disabled".to_string())
+}
+
+#[cfg(feature = "auto-update")]
 pub fn vault_install(vault_path: Option<PathBuf>) -> Result<(), String> {
     let target_path = get_vault_bin_path(vault_path)?;
     let _ = download_from_s3_and_install_bin(

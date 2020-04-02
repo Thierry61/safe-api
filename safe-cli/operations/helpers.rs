@@ -7,13 +7,15 @@
 // specific language governing permissions and limitations relating to use of the SAFE Network
 // Software.
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(all(not(target_os = "windows"), feature = "auto-update"))]
 use std::os::unix::fs::PermissionsExt;
+#[cfg(all(not(target_os = "windows"), feature = "auto-update"))]
 use std::{
     fs::{create_dir_all, File},
     path::PathBuf,
 };
 
+#[cfg(feature = "auto-update")]
 pub fn download_from_s3_and_install_bin(
     target_path: PathBuf,
     bucket: &str,
@@ -42,6 +44,7 @@ pub fn download_from_s3_and_install_bin(
 
 // Private helpers
 
+#[cfg(feature = "auto-update")]
 fn download_and_install_bin(
     target_path: PathBuf,
     target: &str,
@@ -111,14 +114,14 @@ fn download_and_install_bin(
     Ok(target_path.display().to_string())
 }
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", feature = "auto-update"))]
 #[inline]
 fn set_exec_perms(_file_path: PathBuf) -> Result<(), String> {
     // no need to set execution permissions on Windows
     Ok(())
 }
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(all(not(target_os = "windows"), feature = "auto-update"))]
 #[inline]
 fn set_exec_perms(file_path: PathBuf) -> Result<(), String> {
     println!(
