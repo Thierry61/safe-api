@@ -7,8 +7,10 @@
 // specific language governing permissions and limitations relating to use of the SAFE Network
 // Software.
 
+#[cfg(feature = "auto-update")]
 use super::helpers::download_from_s3_and_install_bin;
 use crate::APP_ID;
+#[cfg(feature = "auto-update")]
 use directories::BaseDirs;
 use envy::from_env;
 use log::info;
@@ -18,15 +20,18 @@ use safe_api::{
     AuthAllowPrompt, AuthdStatus, AuthedAppsList, PendingAuthReqs, Safe, SafeAuthdClient,
 };
 use serde::Deserialize;
-use std::{fs::File, path::PathBuf};
+use std::fs::File;
+#[cfg(feature = "auto-update")]
+use std::path::PathBuf;
 
 const AUTH_REQS_NOTIFS_ENDPOINT: &str = "https://localhost:33001";
+#[cfg(feature = "auto-update")]
 const ENV_VAR_SAFE_AUTHD_PATH: &str = "SAFE_AUTHD_PATH";
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(all(not(target_os = "windows"), feature = "auto-update"))]
 const SAFE_AUTHD_EXECUTABLE: &str = "safe-authd";
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", feature = "auto-update"))]
 const SAFE_AUTHD_EXECUTABLE: &str = "safe-authd.exe";
 
 #[derive(Deserialize, Debug)]
@@ -41,6 +46,15 @@ struct LoginDetails {
     pub password: String,
 }
 
+#[cfg(not(feature = "auto-update"))]
+pub fn authd_install(
+    _safe_authd: &SafeAuthdClient,
+    _authd_path: Option<String>,
+) -> Result<(), String> {
+    Err("Auto update is disabled".to_string())
+}
+
+#[cfg(feature = "auto-update")]
 pub fn authd_install(
     safe_authd: &SafeAuthdClient,
     authd_path: Option<String>,
@@ -435,6 +449,7 @@ fn get_login_details(config_file: Option<String>) -> Result<LoginDetails, String
     Ok(details)
 }
 
+#[cfg(feature = "auto-update")]
 #[inline]
 fn get_authd_bin_path(authd_path: Option<String>) -> Result<PathBuf, String> {
     match authd_path {

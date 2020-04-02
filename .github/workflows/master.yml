@@ -1,9 +1,9 @@
 name: Master
 
-on:
-  push:
-    branches:
-      - master
+#on:
+#  push:
+#    branches:
+#      - master
 
 env:
   # Run all cargo commands with --verbose.
