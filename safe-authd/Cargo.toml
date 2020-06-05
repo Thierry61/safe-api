@@ -31,6 +31,7 @@ quinn = {version = "~0.6.1", features=["tls-rustls"], default-features = false}
 
 [features]
 mock-network = ["safe-api/mock-network"]
+auto-update = ["self_update"]
 
 [dependencies.safe-api]
 path = "../safe-api"
@@ -41,6 +42,7 @@ features = ["authenticator", "authd_client"]
 version = "~0.15.0"
 default-features = false
 features = ["rustls", "archive-tar", "archive-zip", "compression-flate2", "compression-zip-deflate"]
+optional = true
 
 [dev-dependencies]
 unwrap = "^1.2.1"

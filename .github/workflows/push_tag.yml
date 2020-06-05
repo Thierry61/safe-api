@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Get Tag Version
         id: get_version
+        shell: bash
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -c11-)
       - name: Create Release
         id: create_release
@@ -43,11 +44,12 @@ jobs:
           - x86_64-apple-darwin
           - armv7-unknown-linux-musleabihf
         include:
-          # All targets are cross compiled from Ubuntu, except MacOS
+          # Targets are cross compiled from Ubuntu, except MacOS and Windows
           - target: x86_64-unknown-linux-musl
             os: ubuntu-latest
+          # Special case for Windows to avoid link error "undefined reference to `epoll_ctl'"
           - target: x86_64-pc-windows-gnu
-            os: ubuntu-latest
+            os: windows-latest
           - target: armv7-unknown-linux-musleabihf
             os: ubuntu-latest
           # Special case for MacOS because cross command doesn't work for this target: error "Attempting to build Mach-O support on incorrect platform" in backtrace-sys"
@@ -61,11 +63,14 @@ jobs:
           name: release-data
       - name: Get Tag Version
         id: get_version
+        shell: bash
         run: echo ::set-output name=VERSION::$(cut -f 1 release-data/release-data.txt)
       - name: Get Upload URL
         id: get_upload_url
+        shell: bash
         run: echo ::set-output name=UPLOAD_URL::$(cut -f 2 release-data/release-data.txt)
       - name: Set Zip File Name
+        shell: bash
         run: echo ::set-env name=zip_file::safe-api-${{ steps.get_version.outputs.VERSION }}-${{ matrix.target }}.zip
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -75,14 +80,16 @@ jobs:
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          use-cross: ${{ matrix.target != 'x86_64-apple-darwin'}}
+          use-cross: ${{ matrix.target != 'x86_64-apple-darwin' && matrix.target != 'x86_64-pc-windows-gnu'}}
           command: build
           args: --release --target=${{ matrix.target }}
       - name: Zip Asset
+        shell: bash
         run: zip -j ${{ env.zip_file }} ./${{ env.target_dir }}/safe ./${{ env.target_dir }}/safe-authd
         if: ${{ !contains(matrix.target, 'windows') }}
       - name: Zip Asset Windows
-        run: zip -j ${{ env.zip_file }} ./${{ env.target_dir }}/safe.exe ./${{ env.target_dir }}/safe-authd.exe
+        shell: powershell
+        run: Compress-Archive -LiteralPath ./${{ env.target_dir }}/safe-authd.exe, ./${{ env.target_dir }}/safe.exe -DestinationPath ${{ env.zip_file }}
         if: contains(matrix.target, 'windows')
       - uses: actions/upload-release-asset@v1
         env:
