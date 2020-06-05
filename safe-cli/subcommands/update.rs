@@ -16,7 +16,14 @@ pub fn update_commander() -> Result<(), Box<dyn (::std::error::Error)>> {
     Ok(())
 }
 
-#[cfg(not(feature = "mock-network"))]
+#[cfg(all(not(feature = "mock-network"), not(feature = "auto-update")))]
+pub fn update_commander() -> Result<(), Box<dyn (::std::error::Error)>> {
+    debug!("Auto updates are disabled.");
+    println!("Auto updates are disabled.");
+    Ok(())
+}
+
+#[cfg(all(not(feature = "mock-network"), feature = "auto-update"))]
 pub fn update_commander() -> Result<(), Box<dyn (::std::error::Error)>> {
     let target = self_update::get_target();
     let releases = self_update::backends::github::ReleaseList::configure()
@@ -27,7 +34,7 @@ pub fn update_commander() -> Result<(), Box<dyn (::std::error::Error)>> {
         .fetch()?;
 
     if releases.is_empty() {
-        println!("Current version is {}", cargo_crate_version!());
+        println!("Current version is {}", env!("CARGO_PKG_VERSION"));
         println!("No releases are available on GitHub to perform an update");
     } else {
         debug!("Found releases: {:#?}\n", releases);
@@ -42,7 +49,7 @@ pub fn update_commander() -> Result<(), Box<dyn (::std::error::Error)>> {
             .target(&target)
             .bin_name(&bin_name)
             .show_download_progress(true)
-            .current_version(cargo_crate_version!())
+            .current_version(env!("CARGO_PKG_VERSION"))
             .build()?
             .update()?;
         println!("Update status: `{}`!", status.version());
