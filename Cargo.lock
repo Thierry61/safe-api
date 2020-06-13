@@ -1411,9 +1411,9 @@ dependencies = [
 
 [[package]]
 name = "hermit-abi"
-version = "0.1.13"
+version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91780f809e750b0a89f5544be56617ff6b1227ee485bcb06ebe10cdf89bd3b71"
+checksum = "b9586eedd4ce6b3c498bc3b4dd92fc9f11166aa908a914071953768066c67909"
 dependencies = [
  "libc",
 ]
@@ -2499,7 +2499,8 @@ dependencies = [
 [[package]]
 name = "quic-p2p"
 version = "0.6.2"
-source = "git+https://github.com/thierry61/quic-p2p?branch=gha#1f47bb857aa3dafe03b693ec5f967dc1dc96f90e"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e9a3d2dc326b4094f599118fdaa8565bd14204b685b91301c47db74c4a41ee7"
 dependencies = [
  "base64 0.10.1",
  "bincode",
@@ -3239,7 +3240,8 @@ dependencies = [
 [[package]]
 name = "safe_app"
 version = "0.16.3"
-source = "git+https://github.com/thierry61/safe-client-libs?branch=gha#9f1d5626562777c43bbe3c842c130435dba0f9a5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df522f09b18ec6e115afdbcf45af3e6ccf03a57e06b6963b6a8aa1033860a782"
 dependencies = [
  "async-trait",
  "bincode",
@@ -3266,7 +3268,8 @@ dependencies = [
 [[package]]
 name = "safe_authenticator"
 version = "0.16.3"
-source = "git+https://github.com/thierry61/safe-client-libs?branch=gha#9f1d5626562777c43bbe3c842c130435dba0f9a5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "479c4298aa8b392500944ae7d22d91371dda5944bf82940ef298e0e9f84cd916"
 dependencies = [
  "async-trait",
  "bincode",
@@ -3289,7 +3292,8 @@ dependencies = [
 [[package]]
 name = "safe_authenticator_ffi"
 version = "0.16.3"
-source = "git+https://github.com/thierry61/safe-client-libs?branch=gha#9f1d5626562777c43bbe3c842c130435dba0f9a5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b572616806fa30e140a15165f1bfeb368e275108bdb9898bada51865e23852d2"
 dependencies = [
  "async-trait",
  "bincode",
@@ -3330,7 +3334,8 @@ dependencies = [
 [[package]]
 name = "safe_core"
 version = "0.41.3"
-source = "git+https://github.com/thierry61/safe-client-libs?branch=gha#9f1d5626562777c43bbe3c842c130435dba0f9a5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "62cea8ebd708ff21f16544f113a239e820f537e7d10407dd97c917d7825db618"
 dependencies = [
  "async-trait",
  "bincode",
@@ -4778,9 +4783,9 @@ checksum = "8ddfeb6eee2fb3b262ef6e0898a52b7563bb8e0d5955a313b3cf2f808246ea14"
 
 [[package]]
 name = "zip"
-version = "0.5.5"
+version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6df134e83b8f0f8153a094c7b0fd79dfebe437f1d76e7715afa18ed95ebe2fd7"
+checksum = "58287c28d78507f5f91f2a4cf1e8310e2c76fd4c6932f93ac60fd1ceb402db7d"
 dependencies = [
  "crc32fast",
  "flate2",
